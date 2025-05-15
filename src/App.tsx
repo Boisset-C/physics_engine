@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Canvas } from "./components";
+import { CanvasView } from "./components";
 import "./App.css";
 
 function App() {
@@ -9,10 +9,7 @@ function App() {
 		<>
 			<h1 className="text-3xl font-bold underline">PHYSICS ENGINE</h1>
 			<div className="card">
-				<button onClick={() => setCount((count) => count + 1)}>
-					count is {count}
-				</button>
-				<Canvas />
+				<CanvasView />
 			</div>
 		</>
 	);

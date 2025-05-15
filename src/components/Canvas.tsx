@@ -1,8 +1,9 @@
 import { useRef, useEffect } from "react";
 
 //CANVAS COMPONENT SCREEN
-export function Canvas() {
+export function Canvas({ isRunning }: { isRunning: boolean }) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
+	const animationRef = useRef<number | null>(null);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -11,12 +12,36 @@ export function Canvas() {
 		const ctx = canvas.getContext("2d");
 		if (!ctx) return;
 
-		//drawing logic
-		ctx.fillStyle = "skyblue";
-		ctx.fillRect(0, 0, canvas.width, canvas.height);
-		ctx.fillStyle = "black";
-		ctx.fillText("Hello Canvas", 10, 50);
-	}, []);
+		let frame = 0;
 
-	return <canvas ref={canvasRef} width={500} height={300} />;
+		const render = () => {
+			frame++;
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			// Example drawing: animated circle
+			ctx.fillStyle = "skyblue";
+			ctx.beginPath();
+			ctx.arc(50 + (frame % 500), 100, 20, 0, Math.PI * 2);
+			ctx.fill();
+
+			animationRef.current = requestAnimationFrame(render);
+		};
+
+		if (isRunning) {
+			render();
+		} else {
+			if (animationRef.current) {
+				cancelAnimationFrame(animationRef.current);
+			}
+		}
+
+		// Cleanup when unmounting or stopping
+		return () => {
+			if (animationRef.current) {
+				cancelAnimationFrame(animationRef.current);
+			}
+		};
+	}, [isRunning]);
+
+	return <canvas ref={canvasRef} width={800} height={500} />;
 }
