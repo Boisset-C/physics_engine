@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Canvas } from "./components";
 import "./App.css";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
 				<button onClick={() => setCount((count) => count + 1)}>
 					count is {count}
 				</button>
+				<Canvas />
 			</div>
 		</>
 	);
