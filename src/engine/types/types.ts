@@ -1,4 +1,5 @@
 //Kinematics Types
+
 export type Velocity = {
 	magnitude: number;
 	direction: "up" | "down";
@@ -16,7 +17,8 @@ export type Time = {
 	units: "s";
 };
 
-export type XPosition = {
+export type Position = {
 	magnitude: number;
+	direction: "x" | "y";
 	unit: "m";
 };

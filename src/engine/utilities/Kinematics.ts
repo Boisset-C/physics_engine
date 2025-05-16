@@ -1,10 +1,10 @@
-import type { Velocity, Acceleration, Time, XPosition } from "../types";
+import type { Velocity, Acceleration, Time, Position } from "../types";
 
 //Velocity --> has a magnitude: number, direction: "-" or "+", unit: "m/s"
 export function velocity(x: number, t: Time): Velocity {
 	return {
 		magnitude: x / t.magnitude,
-		direction: "up",
+		direction: "up", //!!!Hardcoded!!!
 		unit: "m/s",
 	};
 }
@@ -13,7 +13,7 @@ export function velocity(x: number, t: Time): Velocity {
 export function acceleration(v: Velocity, t: Time): Acceleration {
 	return {
 		magnitude: v.magnitude / t.magnitude,
-		direction: "up",
+		direction: "up", //!!!Hardcoded!!!
 		unit: "m/s²",
 	};
 }
@@ -27,7 +27,23 @@ export function acceleration(v: Velocity, t: Time): Acceleration {
  * 3. acceleration: (a)
  * 4. time elapsed: (t)
  */
-function positionTime(): XPosition {}
+export function positionTime(
+	position: Position,
+	v: Velocity,
+	a: Acceleration,
+	t: Time
+): Position {
+	const result =
+		position.magnitude +
+		v.magnitude * t.magnitude +
+		(1 / 2) * a.magnitude * Math.pow(t.magnitude, 2);
+
+	return {
+		magnitude: result,
+		direction: "x", //!!!Hardcoded!!!
+		unit: "m",
+	};
+}
 
 /* EQUATION: VELOCITY-TIME
  * FORMULA --> v = v0 + at
@@ -36,6 +52,15 @@ function positionTime(): XPosition {}
  * 2. accelaration: (a)
  * 3 .time: (t)
  */
+export function velocityTime(v: Velocity, a: Acceleration, t: Time): Velocity {
+	const result = v.magnitude + a.magnitude * t.magnitude;
+
+	return {
+		magnitude: result,
+		direction: "up", //!!!Hardcoded!!!
+		unit: "m/s",
+	};
+}
 
 /* EQUATION: VELOCITY-DISPLACEMENT
  * FORMULA --> v^2 = v0^2 + 2 * a * Δx
@@ -44,6 +69,20 @@ function positionTime(): XPosition {}
  * 2. acceleration: (a)
  * 3. displacement: (Δx) --> the difference in position of an object
  */
+export function velocityDisplacement(
+	v: Velocity,
+	a: Acceleration,
+	position: Position
+): Velocity {
+	const result =
+		Math.pow(v.magnitude, 2) + 2 * a.magnitude * position.magnitude;
+
+	return {
+		magnitude: result,
+		direction: "up", //!!!!Hardcoded!!!!
+		unit: "m/s",
+	};
+}
 
 /*
  * EQUATION: AVERAGE-VELOCITY-POSITION
@@ -55,3 +94,19 @@ function positionTime(): XPosition {}
  * 3. final velocity: vx (m/s)
  * 4. time elapsed: t (seconds)
  */
+export function averageVelocityPosition(
+	p: Position,
+	initialV: Velocity,
+	finalV: Velocity,
+	t: Time
+): Position {
+	const result =
+		p.magnitude +
+		(1 / 2) * (initialV.magnitude + finalV.magnitude) * t.magnitude;
+
+	return {
+		magnitude: result,
+		direction: "x", //!!!!Hardcoded!!!!
+		unit: "m",
+	};
+}
