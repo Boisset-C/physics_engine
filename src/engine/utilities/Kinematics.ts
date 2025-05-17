@@ -14,9 +14,12 @@ export function velocity(x: number, t: Time): Velocity {
 
 //Acceleration --> has a magnitude: number, direction: "-" or "+", unit: "m/s²"
 export function acceleration(v: Velocity, t: Time): Acceleration {
+	let mag: number = v.magnitude / t.magnitude;
+	let dir: "+" | "-" = mag < 0 ? "-" : "+";
+
 	return {
-		magnitude: v.magnitude / t.magnitude,
-		direction: "up", //!!!Hardcoded!!!
+		magnitude: Math.abs(mag),
+		direction: dir,
 		unit: "m/s²",
 	};
 }

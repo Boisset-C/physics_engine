@@ -8,7 +8,7 @@ export type Velocity = {
 
 export type Acceleration = {
 	magnitude: number;
-	direction: "up" | "down";
+	direction: "+" | "-";
 	unit: "m/s²" | "px/s²";
 };
 
