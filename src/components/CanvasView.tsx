@@ -19,7 +19,7 @@ export function CanvasView() {
 	};
 
 	return (
-		<div className="flex flex-col items-center gap-4 p-4">
+		<div className="flex flex-col items-center gap-4 p-4 ">
 			<Canvas isRunning={isRunning} />
 			<div className="flex gap-2">
 				<button

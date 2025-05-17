@@ -2,7 +2,7 @@
 
 export type Velocity = {
 	magnitude: number;
-	direction: "up" | "down";
+	direction: "+" | "-";
 	unit: "m/s" | "px/s";
 };
 

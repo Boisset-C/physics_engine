@@ -43,5 +43,12 @@ export function Canvas({ isRunning }: { isRunning: boolean }) {
 		};
 	}, [isRunning]);
 
-	return <canvas ref={canvasRef} width={800} height={500} />;
+	return (
+		<canvas
+			className="border border-solid border-white-50"
+			ref={canvasRef}
+			width={800}
+			height={500}
+		/>
+	);
 }

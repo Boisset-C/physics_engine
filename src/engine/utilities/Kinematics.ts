@@ -2,9 +2,12 @@ import type { Velocity, Acceleration, Time, Position } from "../types";
 
 //Velocity --> has a magnitude: number, direction: "-" or "+", unit: "m/s"
 export function velocity(x: number, t: Time): Velocity {
+	let mag: number = x / t.magnitude;
+	let dir: "+" | "-" = mag < 0 ? "-" : "+";
+
 	return {
-		magnitude: x / t.magnitude,
-		direction: "up", //!!!Hardcoded!!!
+		magnitude: Math.abs(mag),
+		direction: dir,
 		unit: "m/s",
 	};
 }
