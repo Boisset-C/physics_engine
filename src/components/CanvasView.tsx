@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Canvas } from "./Canvas";
+import { Screen } from "./Screen";
 
 export function CanvasView() {
 	const [isRunning, setIsRunning] = useState(false);
@@ -20,7 +20,7 @@ export function CanvasView() {
 
 	return (
 		<div className="flex flex-col items-center gap-4 p-4 ">
-			<Canvas isRunning={isRunning} />
+			<Screen isRunning={isRunning} />
 			<div className="flex gap-2">
 				<button
 					onClick={handleStart}

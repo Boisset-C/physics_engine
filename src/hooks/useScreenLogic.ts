@@ -1,33 +1,37 @@
-import { useRef, useEffect } from "react";
-import { Rectangle } from "../engine/entities/Rectangle";
+import { useEffect, useRef } from "react";
 import type { Shape } from "../engine/types";
 
-// Canvas Component
-export function Canvas({ isRunning }: { isRunning: boolean }) {
-	const canvasRef = useRef<HTMLCanvasElement>(null);
-	const shapesRef = useRef<Shape[]>([
-		new Rectangle("firstRect", 50, 50, 100, 80, "red"),
-		new Rectangle("secondRect", 200, 100, 120, 60, "blue"),
-	]);
+/* 
+For now handles three jobs:
+1. Drawing shapes
+2. Animation
+3. Mouse interaction
+*/
+export function useScreenLogic(
+	screenRef: React.RefObject<HTMLCanvasElement | null>,
+	shapes: React.RefObject<Shape[]>,
+	isRunning: boolean
+) {
 	const animationRef = useRef<number | null>(null);
 	const draggingShapeRef = useRef<Shape | null>(null);
-	const dragOffset = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+	const dragOffset = useRef({ x: 0, y: 0 });
 
 	useEffect(() => {
-		const canvas = canvasRef.current;
+		const canvas = screenRef.current;
 		if (!canvas) return;
 		const ctx = canvas.getContext("2d");
 		if (!ctx) return;
 		let frame = 0;
 
+		//draw shapes
 		const render = () => {
 			frame++;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			shapesRef.current.forEach((shape) => shape.draw(ctx));
-
+			shapes.current?.forEach((shape: Shape) => shape.draw(ctx));
 			animationRef.current = requestAnimationFrame(render);
 		};
 
+		//mouse events
 		const getMousePos = (e: MouseEvent) => {
 			const rect = canvas.getBoundingClientRect();
 			return {
@@ -38,13 +42,12 @@ export function Canvas({ isRunning }: { isRunning: boolean }) {
 
 		const handleMouseDown = (e: MouseEvent) => {
 			const { x, y } = getMousePos(e);
-			for (const shape of shapesRef.current) {
+			for (const shape of shapes.current ?? []) {
 				if (shape.contains(x, y)) {
-					console.log("Clicked on", shape);
 					const pos = shape.getPosition();
 					draggingShapeRef.current = shape;
 					dragOffset.current = {
-						x: x - pos.y,
+						x: x - pos.x,
 						y: y - pos.y,
 					};
 					break;
@@ -54,7 +57,6 @@ export function Canvas({ isRunning }: { isRunning: boolean }) {
 
 		const handleMouseMove = (e: MouseEvent) => {
 			if (!draggingShapeRef.current) return;
-
 			const { x, y } = getMousePos(e);
 			const offset = dragOffset.current;
 			draggingShapeRef.current.setPosition(x - offset.x, y - offset.y);
@@ -72,21 +74,13 @@ export function Canvas({ isRunning }: { isRunning: boolean }) {
 		canvas.addEventListener("mousemove", handleMouseMove);
 		canvas.addEventListener("mouseup", handleMouseUp);
 
-		// Cleanup
 		return () => {
 			if (animationRef.current) {
 				cancelAnimationFrame(animationRef.current);
 			}
-			canvas.removeEventListener("mousedown", handleMouseDown);
+			canvas.addEventListener("mousedown", handleMouseDown);
+			canvas.addEventListener("mousemove", handleMouseMove);
+			canvas.addEventListener("mouseup", handleMouseUp);
 		};
-	}, [isRunning]);
-
-	return (
-		<canvas
-			className="border border-solid border-white-50"
-			ref={canvasRef}
-			width={800}
-			height={500}
-		/>
-	);
+	}, [screenRef, shapes, isRunning]);
 }
