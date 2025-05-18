@@ -1,5 +1,4 @@
 //Kinematics Types
-
 export type Velocity = {
 	magnitude: number;
 	direction: "+" | "-";
