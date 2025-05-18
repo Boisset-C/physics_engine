@@ -19,6 +19,6 @@ export type Time = {
 
 export type Position = {
 	magnitude: number;
-	direction: "x" | "y";
+	direction: "+" | "-";
 	unit: "m";
 };

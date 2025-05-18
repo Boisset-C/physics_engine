@@ -39,14 +39,15 @@ export function positionTime(
 	a: Acceleration,
 	t: Time
 ): Position {
-	const result =
+	let mag: number =
 		position.magnitude +
 		v.magnitude * t.magnitude +
 		(1 / 2) * a.magnitude * Math.pow(t.magnitude, 2);
+	let dir: "+" | "-" = mag < 0 ? "-" : "+";
 
 	return {
-		magnitude: result,
-		direction: "x", //!!!Hardcoded!!!
+		magnitude: Math.abs(mag),
+		direction: dir,
 		unit: "m",
 	};
 }
@@ -59,11 +60,12 @@ export function positionTime(
  * 3 .time: (t)
  */
 export function velocityTime(v: Velocity, a: Acceleration, t: Time): Velocity {
-	const result = v.magnitude + a.magnitude * t.magnitude;
+	let mag = v.magnitude + a.magnitude * t.magnitude;
+	let dir: "+" | "-" = mag < 0 ? "-" : "+";
 
 	return {
-		magnitude: result,
-		direction: "up", //!!!Hardcoded!!!
+		magnitude: mag,
+		direction: dir,
 		unit: "m/s",
 	};
 }
@@ -80,12 +82,12 @@ export function velocityDisplacement(
 	a: Acceleration,
 	position: Position
 ): Velocity {
-	const result =
-		Math.pow(v.magnitude, 2) + 2 * a.magnitude * position.magnitude;
+	let mag = Math.pow(v.magnitude, 2) + 2 * a.magnitude * position.magnitude;
+	let dir: "+" | "-" = mag < 0 ? "-" : "+";
 
 	return {
-		magnitude: result,
-		direction: "up", //!!!!Hardcoded!!!!
+		magnitude: mag,
+		direction: dir,
 		unit: "m/s",
 	};
 }
@@ -106,13 +108,13 @@ export function averageVelocityPosition(
 	finalV: Velocity,
 	t: Time
 ): Position {
-	const result =
+	let mag =
 		p.magnitude +
 		(1 / 2) * (initialV.magnitude + finalV.magnitude) * t.magnitude;
-
+	let dir: "+" | "-" = mag < 0 ? "-" : "+";
 	return {
-		magnitude: result,
-		direction: "x", //!!!!Hardcoded!!!!
+		magnitude: mag,
+		direction: dir,
 		unit: "m",
 	};
 }
