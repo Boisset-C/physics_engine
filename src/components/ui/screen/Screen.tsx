@@ -1,7 +1,7 @@
 import { useRef } from "react";
-import { Rectangle } from "../engine/entities/Rectangle";
-import type { Shape } from "../engine/types";
-import { useScreenLogic } from "../hooks";
+import { Rectangle } from "../../../engine/entities/index";
+import type { Shape } from "../../../engine/types/index";
+import { useScreenLogic } from "../../../hooks";
 
 //Screen
 export function Screen({ isRunning }: { isRunning: boolean }) {

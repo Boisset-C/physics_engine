@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Screen } from "./Screen";
+import { Screen } from "./index";
 
-export function CanvasView() {
+export function ScreenView() {
 	const [isRunning, setIsRunning] = useState(false);
 
 	const handleStart = () => {
