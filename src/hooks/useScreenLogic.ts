@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import type { Shape } from "../engine/types";
+import type { Shape, Position } from "../engine/types";
 
 /* 
 For now handles three jobs:
@@ -14,7 +14,11 @@ export function useScreenLogic(
 ) {
 	const animationRef = useRef<number | null>(null);
 	const draggingShapeRef = useRef<Shape | null>(null);
-	const dragOffset = useRef({ x: 0, y: 0 });
+	const dragOffset = useRef<Position>({
+		coordinateX: 0,
+		coordinateY: 0,
+		unit: null,
+	});
 
 	useEffect(() => {
 		const canvas = screenRef.current;
@@ -32,23 +36,25 @@ export function useScreenLogic(
 		};
 
 		//mouse events
-		const getMousePos = (e: MouseEvent) => {
+		const getMousePos = (e: MouseEvent): Position => {
 			const rect = canvas.getBoundingClientRect();
 			return {
-				x: e.clientX - rect.left,
-				y: e.clientY - rect.top,
+				coordinateX: e.clientX - rect.left,
+				coordinateY: e.clientY - rect.top,
+				unit: null,
 			};
 		};
 
 		const handleMouseDown = (e: MouseEvent) => {
-			const { x, y } = getMousePos(e);
+			const { coordinateX, coordinateY } = getMousePos(e);
 			for (const shape of shapes.current ?? []) {
-				if (shape.contains(x, y)) {
+				if (shape.contains({ coordinateX, coordinateY, unit: null })) {
 					const pos = shape.getPosition();
 					draggingShapeRef.current = shape;
 					dragOffset.current = {
-						x: x - pos.x,
-						y: y - pos.y,
+						coordinateX: coordinateX - pos.coordinateX,
+						coordinateY: coordinateY - pos.coordinateY,
+						unit: null,
 					};
 					break;
 				}
@@ -57,9 +63,13 @@ export function useScreenLogic(
 
 		const handleMouseMove = (e: MouseEvent) => {
 			if (!draggingShapeRef.current) return;
-			const { x, y } = getMousePos(e);
+			const { coordinateX, coordinateY } = getMousePos(e);
 			const offset = dragOffset.current;
-			draggingShapeRef.current.setPosition(x - offset.x, y - offset.y);
+			draggingShapeRef.current.setPosition({
+				coordinateX: coordinateX - offset.coordinateX,
+				coordinateY: coordinateY - offset.coordinateY,
+				unit: null,
+			});
 		};
 
 		const handleMouseUp = () => {
@@ -78,9 +88,9 @@ export function useScreenLogic(
 			if (animationRef.current) {
 				cancelAnimationFrame(animationRef.current);
 			}
-			canvas.addEventListener("mousedown", handleMouseDown);
-			canvas.addEventListener("mousemove", handleMouseMove);
-			canvas.addEventListener("mouseup", handleMouseUp);
+			canvas.removeEventListener("mousedown", handleMouseDown);
+			canvas.removeEventListener("mousemove", handleMouseMove);
+			canvas.removeEventListener("mouseup", handleMouseUp);
 		};
 	}, [screenRef, shapes, isRunning]);
 }

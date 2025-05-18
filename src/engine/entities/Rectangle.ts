@@ -1,9 +1,8 @@
-import type { Shape } from "../types/index";
+import type { Shape, Position } from "../types/index";
 
 export class Rectangle implements Shape {
 	id: string;
-	x: number;
-	y: number;
+	position: Position;
 	width: number;
 	height: number;
 	color: string;
@@ -20,8 +19,11 @@ export class Rectangle implements Shape {
 		color = "blue"
 	) {
 		this.id = id;
-		this.x = x;
-		this.y = y;
+		this.position = {
+			coordinateX: x,
+			coordinateY: y,
+			unit: null,
+		};
 		this.width = width;
 		this.height = height;
 		this.color = color;
@@ -29,27 +31,29 @@ export class Rectangle implements Shape {
 
 	//draw rectangle inside of canvas element
 	draw(ctx: CanvasRenderingContext2D) {
+		const { coordinateX, coordinateY } = this.position;
 		ctx.fillStyle = this.color;
-		ctx.fillRect(this.x, this.y, this.width, this.height);
+		ctx.fillRect(coordinateX, coordinateY, this.width, this.height);
 	}
 
 	//if all is true --> mouse is inside of rectangle
 	//to be used as condition to select triangle
-	contains(mouseX: number, mouseY: number) {
+	contains(pos: Position): boolean {
+		const { coordinateX: mouseX, coordinateY: mouseY } = pos;
+		const { coordinateX, coordinateY } = this.position;
 		return (
-			mouseX >= this.x && // mouse is to the right of left edge
-			mouseX <= this.x + this.width && // mouse is to the left of right edge
-			mouseY >= this.y && // mouse is below the top edge
-			mouseY <= this.y + this.height // mouse is above bottom edge
+			mouseX >= coordinateX && // mouse is to the right of left edge
+			mouseX <= coordinateX + this.width && // mouse is to the left of right edge
+			mouseY >= coordinateY && // mouse is below the top edge
+			mouseY <= coordinateY + this.height // mouse is above bottom edge
 		);
 	}
 
-	getPosition() {
-		return { x: this.x, y: this.y };
+	getPosition(): Position {
+		return this.position;
 	}
 
-	setPosition(x: number, y: number): void {
-		this.x = x;
-		this.y = y;
+	setPosition(pos: Position): void {
+		this.position = { ...pos };
 	}
 }

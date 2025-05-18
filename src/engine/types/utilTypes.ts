@@ -17,7 +17,7 @@ export type Time = {
 };
 
 export type Position = {
-	magnitude: number;
-	direction: "+" | "-";
-	unit: "m";
+	coordinateY: number;
+	coordinateX: number;
+	unit: "m" | null;
 };
