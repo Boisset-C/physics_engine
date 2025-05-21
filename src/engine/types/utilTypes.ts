@@ -1,4 +1,14 @@
-//Kinematics Types
+export type Scalar = {
+	magnitude: number;
+};
+
+export type Vector2d = {
+	magnitude: number;
+	direction: number;
+	magnitudeUnit: "N";
+	directionUnit: "°";
+};
+
 export type Velocity = {
 	magnitude: number;
 	direction: "+" | "-";
