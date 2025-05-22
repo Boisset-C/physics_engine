@@ -39,19 +39,21 @@ import type { Vector2d } from "./index";
 export function positionTime(
 	position: Position,
 	v: Vector2d,
-	a: Acceleration,
+	a: Vector2d,
 	t: Time
 ): Position {
-	let mag: number =
-		position.magnitude +
-		v.magnitude * t.magnitude +
-		(1 / 2) * a.magnitude * Math.pow(t.magnitude, 2);
-	let dir: "+" | "-" = mag < 0 ? "-" : "+";
+	const { x: vx, y: vy } = v.toXY();
+	const { x: ax, y: ay } = a.toXY();
 
 	return {
-		magnitude: Math.abs(mag),
-		direction: dir,
-		unit: "m",
+		Xcoordinate:
+			position.Xcoordinate +
+			vx * t.magnitude +
+			0.5 * ax * t.magnitude ** 2,
+		Ycoordinate:
+			position.Ycoordinate +
+			vy * t.magnitude +
+			0.5 * ay * t.magnitude ** 2,
 	};
 }
 
@@ -62,39 +64,34 @@ export function positionTime(
  * 2. accelaration: (a)
  * 3 .time: (t)
  */
-export function velocityTime(v: Velocity, a: Acceleration, t: Time): Velocity {
-	let mag = v.magnitude + a.magnitude * t.magnitude;
-	let dir: "+" | "-" = mag < 0 ? "-" : "+";
-
-	return {
-		magnitude: mag,
-		direction: dir,
-		unit: "m/s",
-	};
+export function velocityTime(v: Vector2d, a: Vector2d, t: Time): Vector2d {
+	return v.add(a.scale(t.magnitude));
 }
 
+//!!!!!!!!!NEEEEEED TO FIX!!!!!!!!!!!!!!!!!!!!!
 /* EQUATION: VELOCITY-DISPLACEMENT
  * FORMULA --> v^2 = v0^2 + 2 * a * Δx
  * Calculate Final Velocity of an object without time given the variables:
  * 1. initial velocity: (v0)
  * 2. acceleration: (a)
  * 3. displacement: (Δx) --> the difference in position of an object
- */
-export function velocityDisplacement(
-	v: Velocity,
-	a: Acceleration,
-	position: Position
-): Velocity {
-	let mag = Math.pow(v.magnitude, 2) + 2 * a.magnitude * position.magnitude;
-	let dir: "+" | "-" = mag < 0 ? "-" : "+";
+//  */
+// export function velocityDisplacement(
+// 	v: Velocity,
+// 	a: Acceleration,
+// 	position: Position
+// ): Velocity {
+// 	let mag = Math.pow(v.magnitude, 2) + 2 * a.magnitude * position.magnitude;
+// 	let dir: "+" | "-" = mag < 0 ? "-" : "+";
 
-	return {
-		magnitude: mag,
-		direction: dir,
-		unit: "m/s",
-	};
-}
+// 	return {
+// 		magnitude: mag,
+// 		direction: dir,
+// 		unit: "m/s",
+// 	};
+// }
 
+//!!!!!!!!!NEEEEEED TO FIX!!!!!!!!!!!!!!!!!!!!!
 /*
  * EQUATION: AVERAGE-VELOCITY-POSITION
  * FORMULA --> x = x0 + 1/2(v0^x + vx)t
@@ -105,19 +102,19 @@ export function velocityDisplacement(
  * 3. final velocity: vx (m/s)
  * 4. time elapsed: t (seconds)
  */
-export function averageVelocityPosition(
-	p: Position,
-	initialV: Velocity,
-	finalV: Velocity,
-	t: Time
-): Position {
-	let mag =
-		p.magnitude +
-		(1 / 2) * (initialV.magnitude + finalV.magnitude) * t.magnitude;
-	let dir: "+" | "-" = mag < 0 ? "-" : "+";
-	return {
-		magnitude: mag,
-		direction: dir,
-		unit: "m",
-	};
-}
+// export function averageVelocityPosition(
+// 	p: Position,
+// 	initialV: Velocity,
+// 	finalV: Velocity,
+// 	t: Time
+// ): Position {
+// 	let mag =
+// 		p.magnitude +
+// 		(1 / 2) * (initialV.magnitude + finalV.magnitude) * t.magnitude;
+// 	let dir: "+" | "-" = mag < 0 ? "-" : "+";
+// 	return {
+// 		magnitude: mag,
+// 		direction: dir,
+// 		unit: "m",
+// 	};
+// }

@@ -1,7 +1,7 @@
 import { Vector2d } from "../utilities/Vector2d";
 
 export class Gravity {
-	private vector: Vector2d;
+	vector: Vector2d;
 
 	constructor(magnitude: number = 9.8, direction: number = 90) {
 		this.vector = new Vector2d(magnitude, direction);

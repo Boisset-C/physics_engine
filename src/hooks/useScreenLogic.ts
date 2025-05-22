@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
-import type { Shape, Position } from "../engine/types";
+import type { Shape, Position, Time } from "../engine/types";
 import { simulationSettings } from "../engine/globals/simulationSettings";
+import { velocityTime, positionTime } from "../engine/utilities";
 
 /* 
 For now handles three jobs:
@@ -30,14 +31,20 @@ export function useScreenLogic(
 
 		//draw shapes
 		const render = (now: number) => {
-			const deltaTime = (now - lastTime) / 1000;
+			const deltaTime: Time = {
+				magnitude: (now - lastTime) / 1000,
+				units: "s",
+			};
 			lastTime = now;
 
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 			shapes.current?.forEach((shape: Shape) => {
 				//update object velocity with gravity
-				shape.velocity = gravity.applyTo(shape.velocity, deltaTime);
+				shape.velocity = gravity.applyTo(
+					shape.velocity,
+					deltaTime.magnitude
+				);
 				//DEBUG LOG
 				console.log(
 					"Velocity:",
@@ -48,12 +55,20 @@ export function useScreenLogic(
 
 				//update position with velocity
 				const currentPosition = shape.getPosition();
-				const { x: dx, y: dy } = shape.velocity.toXY();
 
-				shape.setPosition({
-					Xcoordinate: currentPosition.Xcoordinate + dx * deltaTime,
-					Ycoordinate: currentPosition.Ycoordinate + dy * deltaTime,
-				});
+				shape.velocity = velocityTime(
+					shape.velocity,
+					gravity.vector,
+					deltaTime
+				);
+				shape.setPosition(
+					positionTime(
+						currentPosition,
+						shape.velocity,
+						gravity.vector,
+						deltaTime
+					)
+				);
 
 				shape.draw(ctx);
 			});
