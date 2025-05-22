@@ -5,21 +5,15 @@ export type Scalar = {
 export type Vector2d = {
 	magnitude: number;
 	direction: number;
-	magnitudeUnit: "N";
+	unit: "m/s" | "m/s²" | "N" | "px/s" | "px/s²";
 	directionUnit: "°";
 };
 
-export type Velocity = {
-	magnitude: number;
-	direction: "+" | "-";
-	unit: "m/s" | "px/s";
-};
+export type Velocity = Vector2d;
 
-export type Acceleration = {
-	magnitude: number;
-	direction: "+" | "-";
-	unit: "m/s²" | "px/s²";
-};
+export type Acceleration = Vector2d;
+
+export type Force = Vector2d;
 
 export type Time = {
 	magnitude: number;
@@ -27,7 +21,6 @@ export type Time = {
 };
 
 export type Position = {
-	coordinateY: number;
-	coordinateX: number;
-	unit: "m" | null;
+	Ycoordinate: number;
+	Xcoordinate: number;
 };

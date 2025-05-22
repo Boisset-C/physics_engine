@@ -1,6 +1,6 @@
 import { Screen } from "../components/ui/screen/index";
 import { useSimulationControls } from "../hooks/useSimulationControls";
-import { SimulationControlPanel } from "../components/controls/simulationControlPanel";
+import { SimulationControlPanel } from "../components/controls/SimulationControlPanel";
 
 export function HomeView() {
 	const { isRunning, handleStart, handlePause, handleReset } =

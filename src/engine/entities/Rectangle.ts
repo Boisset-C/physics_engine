@@ -1,3 +1,4 @@
+import { Vector2d } from "../utilities/Vector2d";
 import type { Shape, Position } from "../types/index";
 
 export class Rectangle implements Shape {
@@ -9,7 +10,7 @@ export class Rectangle implements Shape {
 	isDragging: boolean = false;
 	offsetX: number = 0;
 	offsetY: number = 0;
-
+	velocity: Vector2d = new Vector2d(0, 0);
 	constructor(
 		id: string,
 		x: number,
@@ -20,9 +21,8 @@ export class Rectangle implements Shape {
 	) {
 		this.id = id;
 		this.position = {
-			coordinateX: x,
-			coordinateY: y,
-			unit: null,
+			Xcoordinate: x,
+			Ycoordinate: y,
 		};
 		this.width = width;
 		this.height = height;
@@ -31,21 +31,21 @@ export class Rectangle implements Shape {
 
 	//draw rectangle inside of canvas element
 	draw(ctx: CanvasRenderingContext2D) {
-		const { coordinateX, coordinateY } = this.position;
+		const { Xcoordinate, Ycoordinate } = this.position;
 		ctx.fillStyle = this.color;
-		ctx.fillRect(coordinateX, coordinateY, this.width, this.height);
+		ctx.fillRect(Xcoordinate, Ycoordinate, this.width, this.height);
 	}
 
 	//if all is true --> mouse is inside of rectangle
 	//to be used as condition to select triangle
 	contains(pos: Position): boolean {
-		const { coordinateX: mouseX, coordinateY: mouseY } = pos;
-		const { coordinateX, coordinateY } = this.position;
+		const { Xcoordinate: mouseX, Ycoordinate: mouseY } = pos;
+		const { Xcoordinate, Ycoordinate } = this.position;
 		return (
-			mouseX >= coordinateX && // mouse is to the right of left edge
-			mouseX <= coordinateX + this.width && // mouse is to the left of right edge
-			mouseY >= coordinateY && // mouse is below the top edge
-			mouseY <= coordinateY + this.height // mouse is above bottom edge
+			mouseX >= Xcoordinate && // mouse is to the right of left edge
+			mouseX <= Xcoordinate + this.width && // mouse is to the left of right edge
+			mouseY >= Ycoordinate && // mouse is below the top edge
+			mouseY <= Ycoordinate + this.height // mouse is above bottom edge
 		);
 	}
 
@@ -54,6 +54,7 @@ export class Rectangle implements Shape {
 	}
 
 	setPosition(pos: Position): void {
-		this.position = { ...pos };
+		this.position.Xcoordinate = pos.Xcoordinate;
+		this.position.Ycoordinate = pos.Ycoordinate;
 	}
 }

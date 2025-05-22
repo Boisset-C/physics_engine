@@ -1,28 +1,29 @@
 import type { Velocity, Acceleration, Time, Position } from "../types";
+import type { Vector2d } from "./index";
 
 //Velocity --> has a magnitude: number, direction: "-" or "+", unit: "m/s"
-export function velocity(x: number, t: Time): Velocity {
-	let mag: number = x / t.magnitude;
-	let dir: "+" | "-" = mag < 0 ? "-" : "+";
+// export function velocity(x: number, t: Time): Velocity {
+// 	let mag: number = x / t.magnitude;
+// 	let dir: "+" | "-" = mag < 0 ? "-" : "+";
 
-	return {
-		magnitude: Math.abs(mag),
-		direction: dir,
-		unit: "m/s",
-	};
-}
+// 	return {
+// 		magnitude: Math.abs(mag),
+// 		direction: dir,
+// 		unit: "m/s",
+// 	};
+// }
 
-//Acceleration --> has a magnitude: number, direction: "-" or "+", unit: "m/s²"
-export function acceleration(v: Velocity, t: Time): Acceleration {
-	let mag: number = v.magnitude / t.magnitude;
-	let dir: "+" | "-" = mag < 0 ? "-" : "+";
+// //Acceleration --> has a magnitude: number, direction: "-" or "+", unit: "m/s²"
+// // export function acceleration(v: Velocity, t: Time): Acceleration {
+// // 	let mag: number = v.magnitude / t.magnitude;
+// // 	let dir: "+" | "-" = mag < 0 ? "-" : "+";
 
-	return {
-		magnitude: Math.abs(mag),
-		direction: dir,
-		unit: "m/s²",
-	};
-}
+// // 	return {
+// // 		magnitude: Math.abs(mag),
+// // 		direction: dir,
+// // 		unit: "m/s²",
+// // 	};
+// }
 
 /*
  * EQUATION: POSITION-TIME
@@ -33,9 +34,11 @@ export function acceleration(v: Velocity, t: Time): Acceleration {
  * 3. acceleration: (a)
  * 4. time elapsed: (t)
  */
+
+//!!!Will need to refactor
 export function positionTime(
 	position: Position,
-	v: Velocity,
+	v: Vector2d,
 	a: Acceleration,
 	t: Time
 ): Position {
